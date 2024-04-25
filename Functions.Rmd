@@ -1,20 +1,27 @@
 ---
-title: "Functions"
-output: html_document
-date: "2024-04-25"
+title: "Collaborative Data Science Project"
+author: "Jamie Wiener, Ryan Hernandez, and Claire Brandes"
+output: 
+  html_document: 
+    highlight: tango
+
 ---
 
-```{r}
+Loading necessary packages:
+
+```{r message=FALSE}
 library(tidyverse)
-library(stringi)
 ```
 
-```{r}
-f <- "C:\Users\ryanh\OneDrive\Documents\Collaborative Project ADA\bci_census_2010.txt"
+Loading in dataset: census data of tree species in Panama 
+
+```{r message=FALSE}
+f <- "https://raw.githubusercontent.com/clairebran/collaborative-project-ADA/main/bci_census_2010.txt"
 
 d <- read_tsv(f)
 ```
 
+Formatting census dataset with species names and number of individuals of each species present:
 
 ```{r}
 census <- function(col_name){
@@ -34,6 +41,8 @@ return(census)
 c <- census(d$Latin)
 ```
 
+Functions for calculating species richness, Simpson's Diversity Index, Simpson Evenness, Shannon-Wiener Index (and Hmax), Shannon Evenness, and Berger-Parker Dominance: 
+
 ```{r}
 div_index <- function(species_col, pop_col){
   
@@ -50,26 +59,26 @@ div_index <- function(species_col, pop_col){
   #Species Richness
   index_values[[1]] <- num_spe
   
-  #Simpsons
+  #Simpson's Diversity Index 
   for (i in 1:length(species_col)){
   simps_ind[[i]] <- (pop_col[[i]]/tot_pop)^2
   index_values[[2]] <- sum(simps_ind)
   }
   
-  #Simpson's evenness
+  #Simpson's Evenness
   index_values[[3]] <- 1/(index_values[[2]]*num_spe)
   
-  #Shannon and Hmax
+  #Shannon-Wiener Diversity Index and Hmax
   for (i in 1:length(species_col)){
   shannon_ind[[i]] <- (pop_col[[i]]/tot_pop)*log(pop_col[[i]]/tot_pop)
   index_values[[4]] <- sum(shannon_ind)*-1
   index_values[[5]] <- log(num_spe)
   }
   
-  #Shannon's evenness
+  #Shannon's Evenness
   index_values[[6]] <- (index_values[[4]]/index_values[[5]])
   
-  #Berger
+  #Berger-Parker Dominance
   for (i in 1:length(species_col)){
   berger_ind[[i]] <- (pop_col[[i]]/tot_pop)
   index_values[[7]] <- max(berger_ind)
