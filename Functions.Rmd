@@ -37,8 +37,10 @@ c <- census(d$Latin)
 ```{r}
 div_index <- function(species_col, pop_col){
   
+  
   index_name <- c("Species Richness", "Simpson's Index", "Shannon-Weiner Index", "Shannon Hmax", "Berger-Parker Index")
   index_values <- vector()
+  
   
   simps_ind <- vector()
   shannon_ind <- vector()
