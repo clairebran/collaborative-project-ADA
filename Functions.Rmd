@@ -1,0 +1,66 @@
+---
+title: "Functions"
+output: html_document
+date: "2024-04-25"
+---
+
+```{r}
+library(tidyverse)
+library(stringi)
+```
+
+```{r}
+f <- "C:/Users/ryanh/OneDrive/Documents/Collaborative Data Science Project/bci_census_2010.txt"
+
+d <- read_tsv(f)
+```
+
+
+```{r}
+census <- function(col_name){
+ 
+  species_names <- list()
+  species_names <- unique(col_name)
+  
+  individuals <- vector()
+  for (i in 1:length(species_names)){
+  individuals[[i]] <- length(which(col_name == species_names[[i]]))
+  }
+  
+  census <- data.frame(species_names, individuals)
+return(census)
+  }
+  
+c <- census(d$Latin)
+```
+
+```{r}
+div_index <- function(species_col, pop_col){
+  
+  index_name <- c("Simpson's Index", "Shannon-Weiner Index")
+  index_values <- vector()
+  
+  simps_ind <- vector()
+  shannon_ind <- vector()
+  
+  num_spe <- nrow(species_col)
+  tot_pop <- sum(pop_col)
+  
+  for (i in 1:length(species_col)){
+  simps_ind[[i]] <- (pop_col[[i]]/tot_pop)^2
+  index_values[[1]] <- sum(simps_ind)
+  }
+  
+  for (i in 1:length(species_col)){
+  shannon_ind[[i]] <- (pop_col[[i]]/tot_pop)*log(pop_col[[i]]/tot_pop)
+  index_values[[2]] <- sum(shannon_ind)*-1
+  }
+  
+  div_index <- data.frame(index_name, index_values)
+return(div_index)
+  }
+
+div_ind <- div_index(c$species_names, c$individuals)
+```
+
+
