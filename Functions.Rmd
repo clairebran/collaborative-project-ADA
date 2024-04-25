@@ -10,7 +10,7 @@ library(stringi)
 ```
 
 ```{r}
-f <- "C:/Users/ryanh/OneDrive/Documents/Collaborative Data Science Project/bci_census_2010.txt"
+f <- "C:/Users/ryanh/OneDrive/Documents/Collaborative Project ADA/bci_census_2010.txt"
 
 d <- read_tsv(f)
 ```
@@ -37,25 +37,41 @@ c <- census(d$Latin)
 ```{r}
 div_index <- function(species_col, pop_col){
   
-  index_name <- c("Simpson's Index", "Shannon-Weiner Index")
+  index_name <- c("Species Richness", "Simpson's Index", "Shannon-Weiner Index", "Shannon Hmax", "Berger-Parker Index")
   index_values <- vector()
   
+  species_richness <- vector()
   simps_ind <- vector()
   shannon_ind <- vector()
+  berger_ind <- vector()
   
-  num_spe <- nrow(species_col)
+  num_spe <- length(c$species_names)
   tot_pop <- sum(pop_col)
   
+  #Species Richness
+  index_values[[1]] <- num_spe
+  
+  #Simpsons
   for (i in 1:length(species_col)){
   simps_ind[[i]] <- (pop_col[[i]]/tot_pop)^2
-  index_values[[1]] <- sum(simps_ind)
+  index_values[[2]] <- sum(simps_ind)
   }
   
+  #Shannon and Hmax
   for (i in 1:length(species_col)){
   shannon_ind[[i]] <- (pop_col[[i]]/tot_pop)*log(pop_col[[i]]/tot_pop)
-  index_values[[2]] <- sum(shannon_ind)*-1
+  index_values[[3]] <- sum(shannon_ind)*-1
+  index_values[[4]] <- log(num_spe)
   }
   
+  #Berger
+  for (i in 1:length(species_col)){
+  berger_ind[[i]] <- (pop_col[[i]]/tot_pop)
+  index_values[[5]] <- max(berger_ind)
+ 
+  }
+  
+  index_values <- format(index_values, scientific = FALSE)
   div_index <- data.frame(index_name, index_values)
 return(div_index)
   }
