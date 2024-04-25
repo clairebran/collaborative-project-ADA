@@ -40,7 +40,6 @@ div_index <- function(species_col, pop_col){
   index_name <- c("Species Richness", "Simpson's Index", "Shannon-Weiner Index", "Shannon Hmax", "Berger-Parker Index")
   index_values <- vector()
   
-  species_richness <- vector()
   simps_ind <- vector()
   shannon_ind <- vector()
   berger_ind <- vector()
@@ -68,7 +67,6 @@ div_index <- function(species_col, pop_col){
   for (i in 1:length(species_col)){
   berger_ind[[i]] <- (pop_col[[i]]/tot_pop)
   index_values[[5]] <- max(berger_ind)
- 
   }
   
   index_values <- format(index_values, scientific = FALSE)
